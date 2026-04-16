@@ -7,28 +7,28 @@ repos:
         name: black
         language: system
         types: [python]
-        entry: bash -c 'command -v task > /dev/null && CMD=task || CMD=go-task; ${CMD} lint:black -- "$@"'
+        entry: bash -c 'command -v task > /dev/null && CMD=task || CMD=go-task; ${CMD} lint:black -- "$@"' _
       - id: isort
         name: isort
         language: system
         types: [python]
-        entry: bash -c 'command -v task > /dev/null && CMD=task || CMD=go-task; ${CMD} lint:isort -- "$@"'
+        entry: bash -c 'command -v task > /dev/null && CMD=task || CMD=go-task; ${CMD} lint:isort -- "$@"' _
       - id: ruff
         name: ruff
         language: system
         types: [python]
-        entry: bash -c 'command -v task > /dev/null && CMD=task || CMD=go-task; ${CMD} lint:ruff -- "$@"'
+        entry: bash -c 'command -v task > /dev/null && CMD=task || CMD=go-task; ${CMD} lint:ruff -- "$@"' _
       - id: flake8
         name: flake8
         language: system
         types: [python]
-        entry: bash -c 'command -v task > /dev/null && CMD=task || CMD=go-task; ${CMD} lint:flake8 -- "$@"'
+        entry: bash -c 'command -v task > /dev/null && CMD=task || CMD=go-task; ${CMD} lint:flake8 -- "$@"' _
       - id: migrations
         name: migrations
         language: system
         types: [python]
         pass_filenames: false
-        entry: bash -c 'command -v task > /dev/null && CMD=task || CMD=go-task; ${CMD} lint:migrations'
+        entry: bash -c 'command -v task > /dev/null && CMD=task || CMD=go-task; ${CMD} lint:migrations' _
   - repo: https://github.com/python-poetry/poetry
     rev: '2.1.3'
     hooks:

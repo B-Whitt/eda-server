@@ -17,6 +17,7 @@ __pycache__/
 .env
 ./coverage.xml
 ./htmlcov/
+**/.DS_Store
 
 # Task
 .task/
