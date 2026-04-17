@@ -231,3 +231,19 @@ SINGLETON_CREDENTIAL_TYPES = [
     AnalyticsCredentialType.BASIC,
     AnalyticsCredentialType.OAUTH,
 ]
+
+
+class ManagementJobType(DjangoStrEnum):
+    """Types of management jobs available in EDA."""
+
+    CLEANUP_AUDIT_LOGS = "cleanup_audit_logs"
+    CLEANUP_STALE_ACTIVATIONS = "cleanup_stale_activations"
+
+
+class ExecutionStatus(DjangoStrEnum):
+    """Status of a management job execution."""
+
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
