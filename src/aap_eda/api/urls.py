@@ -57,6 +57,11 @@ router.register("organizations", views.OrganizationViewSet)
 router.register("teams", views.TeamViewSet)
 router.register("event-streams", views.EventStreamViewSet)
 router.register(
+    "management-jobs",
+    views.ManagementJobViewSet,
+    basename="management-job",
+)
+router.register(
     "external_event_stream",
     views.ExternalEventStreamViewSet,
     basename="external_event_stream",

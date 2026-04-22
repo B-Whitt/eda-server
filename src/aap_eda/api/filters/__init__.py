@@ -22,6 +22,7 @@ from .credential_type import CredentialTypeFilter
 from .decision_environment import DecisionEnvironmentFilter
 from .eda_credential import EdaCredentialFilter
 from .event_stream import EventStreamFilter
+from .management_job import ManagementJobFilter
 from .organization import OrganizationFilter
 from .project import ProjectFilter
 from .rulebook import RulebookFilter
@@ -52,4 +53,6 @@ __all__ = (
     "OrganizationTeamFilter",
     # EventStream
     "EventStreamFilter",
+    # Management jobs
+    "ManagementJobFilter",
 )

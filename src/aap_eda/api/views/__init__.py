@@ -20,6 +20,7 @@ from .credential_type import CredentialTypeViewSet
 from .decision_environment import DecisionEnvironmentViewSet
 from .eda_credential import EdaCredentialViewSet
 from .event_stream import EventStreamViewSet
+from .management_job import ManagementJobViewSet
 from .external_event_stream import ExternalEventStreamViewSet
 from .organization import OrganizationViewSet
 from .project import ProjectViewSet
@@ -63,4 +64,6 @@ __all__ = (
     "EventStreamViewSet",
     # External event stream
     "ExternalEventStreamViewSet",
+    # Management jobs
+    "ManagementJobViewSet",
 )

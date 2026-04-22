@@ -52,6 +52,12 @@ from .eda_credential import (
     EdaCredentialUpdateSerializer,
 )
 from .event_stream import EventStreamInSerializer, EventStreamOutSerializer
+from .management_job import (
+    ManagementJobExecutionDetailSerializer,
+    ManagementJobExecutionSerializer,
+    ManagementJobReadSerializer,
+    ManagementJobUpdateSerializer,
+)
 from .organization import (
     OrganizationCreateSerializer,
     OrganizationRefSerializer,
@@ -155,4 +161,9 @@ __all__ = (
     # event streams
     "EventStreamInSerializer",
     "EventStreamOutSerializer",
+    # management jobs
+    "ManagementJobReadSerializer",
+    "ManagementJobUpdateSerializer",
+    "ManagementJobExecutionSerializer",
+    "ManagementJobExecutionDetailSerializer",
 )
