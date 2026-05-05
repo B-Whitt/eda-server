@@ -35,3 +35,6 @@ dispatcherd/
 
 # OpenAPI
 openapi.json
+
+# Claude
+.claude/
