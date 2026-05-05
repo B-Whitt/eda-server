@@ -334,7 +334,49 @@ jobs:
     permissions:
       pull-requests: write
       issues: read
+      deployments: write
+      statuses: write
     steps:
+      - name: Set commit status
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const e2e = '${{ needs.api-e2e-tests.result }}';
+            const multinode = '${{ needs.api-e2e-multinode-tests.result }}';
+            const allPassed = e2e === 'success' && multinode === 'success';
+
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ needs.check-trigger.outputs.pr_sha }}',
+              state: allPassed ? 'success' : 'failure',
+              context: 'e2e-tests',
+              description: allPassed
+                ? 'All e2e tests passed'
+                : 'E2e tests failed',
+              target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            });
+
+      - name: Update deployment status
+        if: needs.check-trigger.outputs.deployment_id != ''
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const e2e = '${{ needs.api-e2e-tests.result }}';
+            const multinode = '${{ needs.api-e2e-multinode-tests.result }}';
+            const allPassed = e2e === 'success' && multinode === 'success';
+
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: '${{ needs.check-trigger.outputs.deployment_id }}',
+              state: allPassed ? 'success' : 'failure',
+              description: allPassed
+                ? 'All e2e tests have passed'
+                : 'E2E tests failed',
+              log_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            });
+
       - name: Post result comment
         uses: actions/github-script@v9
         with:
