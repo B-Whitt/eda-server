@@ -323,3 +323,73 @@ jobs:
               state: state,
               log_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
             });
+
+  notify-result-e2e:
+    needs: [check-trigger, api-e2e-tests, api-e2e-multinode-tests]
+    if: >
+      always() &&
+      github.event_name == 'issue_comment' &&
+      startsWith(github.event.comment.body, '/run-e2e')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: read
+    steps:
+      - name: Post result comment
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const triggerResult = '${{ needs.check-trigger.result }}';
+            const e2eResult = '${{ needs.api-e2e-tests.result }}';
+            const multinodeResult = '${{ needs.api-e2e-multinode-tests.result }}';
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const statusIcon = (result) => ({
+              success: ':white_check_mark: Passed',
+              failure: ':x: Failed',
+              skipped: ':warning: Skipped',
+              cancelled: ':no_entry: Cancelled',
+            }[result] || `:question: ${result}`);
+
+            const reasons = [];
+
+            if (triggerResult === 'skipped') {
+              const body = context.payload.comment.body;
+              if (body !== '/run-e2e') {
+                reasons.push(`Comment must be exactly \`/run-e2e\` with no extra characters. Received: \`${JSON.stringify(body)}\``);
+              }
+            }
+
+            if (e2eResult === 'failure') {
+              reasons.push('**API E2E Tests** failed — see [workflow run logs](' + runUrl + ') for details.');
+            }
+            if (e2eResult === 'skipped' && triggerResult === 'success') {
+              reasons.push('**API E2E Tests** were skipped unexpectedly.');
+            }
+
+            if (multinodeResult === 'failure') {
+              reasons.push('**Multinode E2E Tests** failed — see [workflow run logs](' + runUrl + ') for details.');
+            }
+            if (multinodeResult === 'skipped' && triggerResult === 'success') {
+              reasons.push('**Multinode E2E Tests** were skipped unexpectedly.');
+            }
+
+            let body = `**E2E Test Results**\n\n`;
+            body += `| Job | Status |\n`;
+            body += `|-----|--------|\n`;
+            body += `| Trigger Check | ${statusIcon(triggerResult)} |\n`;
+            body += `| API E2E Tests | ${statusIcon(e2eResult)} |\n`;
+            body += `| Multinode E2E Tests | ${statusIcon(multinodeResult)} |\n`;
+
+            if (reasons.length > 0) {
+              body += `\n**Why:**\n\n${reasons.map(r => '- ' + r).join('\n')}\n`;
+            }
+
+            body += `\n[View workflow run](${runUrl})`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });
