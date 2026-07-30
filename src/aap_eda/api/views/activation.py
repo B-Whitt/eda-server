@@ -832,7 +832,14 @@ class ActivationInstanceViewSet(viewsets.ReadOnlyModelViewSet):
                 type=int,
                 location=OpenApiParameter.PATH,
                 description="A unique integer value identifying this Activation Instance.",  # noqa: E501
-            )
+            ),
+            OpenApiParameter(
+                name="ordering",
+                type=str,
+                location=OpenApiParameter.QUERY,
+                description="Sort order: 'id' (oldest first) or '-id' (newest first, default).",  # noqa: E501
+                enum=["id", "-id"],
+            ),
         ],
         extensions={
             "x-ai-description": (
